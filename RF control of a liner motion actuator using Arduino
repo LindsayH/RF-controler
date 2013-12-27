@@ -1,0 +1,76 @@
+const int power=13;       //define power as pin 13
+const int relaypin1=7;    //define relaypin1 as pin 7
+const int relaypin2=6;    //define relaypin2 as pin 6
+const int relaypin3=5;    //define relaypin3 as pin 5
+const int relaypin4=4;    //define relaypin4 as pin 4
+const int A=9;            //define buton a on the remote as pin 9
+const int B=10;           //define buton b on the remote as pin 10
+
+
+void setup()
+{
+  pinMode(relaypin1,OUTPUT);   //sets relay pins as outputs
+  pinMode(relaypin2,OUTPUT);   //
+  pinMode(relaypin3,OUTPUT);   //
+  pinMode(relaypin4,OUTPUT);   //
+  pinMode(A,INPUT);            //sets A button pin to an input  
+  pinMode(B,INPUT);            //sets B button pin to an input
+  pinMode(power,OUTPUT);       //sets the power pin as an output  
+  Serial.begin(9600);          //starts serial comunication at 9600 baud
+}
+
+void loop()
+{
+  digitalWrite(power,HIGH);     // power the RF recever
+  int out=(digitalRead(A) );    //difine out as value of A
+  int in=(digitalRead(B) );     //difine in as value of B
+  Serial.println(in);           //report in (for trobleshooting)
+  
+  
+
+  
+  
+  {
+    digitalWrite(relaypin1,HIGH);
+    digitalWrite(relaypin2,HIGH);  //set rest position as relays off
+    digitalWrite(relaypin3,HIGH);
+    digitalWrite(relaypin4,HIGH);
+  }
+  if(out==1 )                  //If buton A on the remote is presed 
+  {
+    digitalWrite(relaypin1,LOW);
+    digitalWrite(relaypin2,LOW); //open the door by powering the actuater
+    digitalWrite(relaypin3,HIGH);
+    digitalWrite(relaypin4,HIGH);
+    Serial.println("OUT");\
+    digitalWrite(power,LOW);     //reset the RF recever to all off
+    delay(1000);                 //keep the relays on for 1 second   
+   }
+
+    {
+    digitalWrite(relaypin1,HIGH);
+    digitalWrite(relaypin2,HIGH); //retern to rest 
+    digitalWrite(relaypin3,HIGH);
+    digitalWrite(relaypin4,HIGH);
+  }
+  if(in==1 )                    //if buton B on the remote is pused.
+  {
+    digitalWrite(relaypin1,HIGH);
+    digitalWrite(relaypin2,HIGH);
+    digitalWrite(relaypin3,LOW);  // close the door by powering with reverse polarity
+    digitalWrite(relaypin4,LOW);
+    Serial.println("IN");
+    digitalWrite(power,LOW);      //reset the RF recever to all off
+    delay(1000);                  //keep the relays on for 1 second
+   
+  }
+   {
+    digitalWrite(relaypin1,HIGH);
+    digitalWrite(relaypin2,HIGH);  //retern to rest state 
+    digitalWrite(relaypin3,HIGH);
+    digitalWrite(relaypin4,HIGH);
+    
+  }
+
+}
+
